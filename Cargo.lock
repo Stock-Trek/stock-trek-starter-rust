@@ -849,6 +849,7 @@ version = "0.2.0"
 dependencies = [
  "chrono",
  "rand 0.10.2",
+ "rust_decimal",
  "stock-trek",
  "strum",
 ]

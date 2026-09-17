@@ -1,14 +1,13 @@
-use crate::{algorithms::cost_averaging::CostAveraging, market_data::MarketDataFactory};
-use std::collections::HashMap;
-use stock_trek::{
-    EnqueueActionFn, ResolvedContext,
-    errors::StockTrekResult,
-    prelude::*,
-    signals::{CexMarketDataByBaseContext, CexMarketDataByQuoteContext},
+use crate::{
+    algorithms::cost_averaging::CostAveraging,
+    market_data::MarketDataFactory,
+    portfolio::{ACCOUNT_ID, PortfolioFactory},
 };
+use stock_trek::{EnqueueActionFn, ResolvedContext, errors::StockTrekResult, prelude::*};
 
 mod algorithms;
 mod market_data;
+mod portfolio;
 
 pub fn main() -> StockTrekResult<()> {
     let algorithm = CostAveraging::default();
@@ -16,26 +15,19 @@ pub fn main() -> StockTrekResult<()> {
     let strategy_context = StrategyContext::new();
     let command = algorithm.strategy(&strategy_context);
 
-    let bitcoin_tether_market = MarketDataFactory::random();
-    let mut bitcoin_markets_by_quote = HashMap::new();
-    bitcoin_markets_by_quote.insert(AssetId::TetherUSD, bitcoin_tether_market);
-    let bitcoin_market = CexMarketDataByQuoteContext::new(bitcoin_markets_by_quote);
-    let mut markets_by_base = HashMap::new();
-    markets_by_base.insert(AssetId::Bitcoin, bitcoin_market);
-    let binance_market_data = CexMarketDataByBaseContext::new(markets_by_base);
-
-    let mut cex_market_data = HashMap::new();
-    cex_market_data.insert(CexId::Binance, binance_market_data);
-    let signal_context = SignalContext::new(cex_market_data);
-    let signals = algorithm.signals(&signal_context);
+    let signal_context: SignalContext = MarketDataFactory::random().into();
+    let mut signals = algorithm.signals(&signal_context);
+    signals.write(
+        &SignalKey::new_required("ACCOUNT"),
+        AccountId::new(ACCOUNT_ID),
+    );
 
     let mut actions = Vec::new();
     let enqueue_action: EnqueueActionFn = Box::new(move |action, policy| {
         actions.push((action.clone(), policy.clone()));
         Ok(())
     });
-    let portfolios = HashMap::new();
-    let portfolio = Portfolio::new(portfolios);
+    let portfolio: Portfolio = PortfolioFactory::random().into();
     let mut resolved_context = ResolvedContext {
         enqueue_action,
         portfolio,
