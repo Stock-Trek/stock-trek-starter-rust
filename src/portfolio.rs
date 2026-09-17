@@ -55,7 +55,7 @@ impl PortfolioFactory {
             AssetId::Bitcoin,
             Decimal::new(rng.random_range(1..10), 2),
         );
-        let tag = Tag::new("RandomPortfolio");
+        let tag = Tag::new("BuyBitcoinLimit");
         let order_request = OrderRequest::Limit {
             base: AssetId::Bitcoin,
             quote: AssetId::TetherUSD,
