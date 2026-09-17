@@ -1,26 +1,46 @@
-use crate::strategy::strategy::CostAveraging;
+use crate::{algorithms::cost_averaging::CostAveraging, market_data::MarketDataFactory};
 use std::collections::HashMap;
-use stock_trek::prelude::*;
+use stock_trek::{
+    EnqueueActionFn, ResolvedContext,
+    errors::StockTrekResult,
+    prelude::*,
+    signals::{CexMarketDataByBaseContext, CexMarketDataByQuoteContext},
+};
 
-mod strategy;
+mod algorithms;
+mod market_data;
 
 pub fn main() -> StockTrekResult<()> {
-    let strategy = CostAveraging::default();
-    let exchange = ExchangeFactory::stub();
-    let mut exchanges = HashMap::new();
-    exchanges.insert(ExchangeId::Binance, exchange);
-    let resolver_context: ResolverContext = ResolverContext::new();
-    let strategy_context: StrategyContext = StrategyContext::new(exchanges);
-    let resolver = strategy.action_resolver(resolver_context)?;
-    let scratch_pad = strategy.market_calculations(strategy_context)?;
-    println!("{:?}", scratch_pad);
-    let portfolio = PortfolioFactory::stub();
-    let resolved_context = ResolvedContext {
-        portfolio,
-        scratch_pad,
-    };
+    let algorithm = CostAveraging::default();
+
+    let strategy_context = StrategyContext::new();
+    let command = algorithm.strategy(&strategy_context);
+
+    let bitcoin_tether_market = MarketDataFactory::random();
+    let mut bitcoin_markets_by_quote = HashMap::new();
+    bitcoin_markets_by_quote.insert(AssetId::TetherUSD, bitcoin_tether_market);
+    let bitcoin_market = CexMarketDataByQuoteContext::new(bitcoin_markets_by_quote);
+    let mut markets_by_base = HashMap::new();
+    markets_by_base.insert(AssetId::Bitcoin, bitcoin_market);
+    let binance_market_data = CexMarketDataByBaseContext::new(markets_by_base);
+
+    let mut cex_market_data = HashMap::new();
+    cex_market_data.insert(CexId::Binance, binance_market_data);
+    let signal_context = SignalContext::new(cex_market_data);
+    let signals = algorithm.signals(&signal_context);
+
     let mut actions = Vec::new();
-    println!("resolve");
-    resolver.resolve(&resolved_context, &mut actions)?;
+    let enqueue_action: EnqueueActionFn = Box::new(move |action, policy| {
+        actions.push((action.clone(), policy.clone()));
+        Ok(())
+    });
+    let portfolios = HashMap::new();
+    let portfolio = Portfolio::new(portfolios);
+    let mut resolved_context = ResolvedContext {
+        enqueue_action,
+        portfolio,
+        signals,
+    };
+    command.execute(&mut resolved_context)?;
     Ok(())
 }
