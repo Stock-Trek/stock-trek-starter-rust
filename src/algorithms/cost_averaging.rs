@@ -23,6 +23,12 @@ impl Default for CostAveraging {
 
 #[register_algorithm(default)]
 impl Algorithm for CostAveraging {
+    fn name(&self) -> &str {
+        "CostAveraging"
+    }
+    fn description(&self) -> &str {
+        "Finds the cheapest market BTC/USDT price, then places a Limit order at that price"
+    }
     fn preferences(&self) -> Preferences {
         Preferences {
             cex: CexPreferences {
