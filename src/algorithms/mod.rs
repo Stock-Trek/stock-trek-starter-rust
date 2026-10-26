@@ -1,1 +1,1 @@
-pub mod cost_averaging;
+pub mod algorithm;

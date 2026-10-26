@@ -1,5 +1,5 @@
 use crate::{
-    algorithms::cost_averaging::CostAveraging,
+    algorithms::algorithm::CostAveraging,
     market_data::MarketDataFactory,
     portfolio::{ACCOUNT_ID, PortfolioFactory},
 };

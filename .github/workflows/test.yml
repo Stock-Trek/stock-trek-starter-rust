@@ -19,3 +19,8 @@ jobs:
           cargo fmt --check
           cargo clippy -- -D warnings
           cargo test
+
+      - name: Verify
+        run: |
+          cargo install stock-trek-check
+          stock-trek-check verify --file ./src/algorithms/algorithm.rs
