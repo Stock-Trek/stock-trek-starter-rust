@@ -71,11 +71,9 @@ jobs:
         with:
           client-id: ${{ env.GITHUB_APP_AGENT_HELPER_CLIENT_ID }}
           private-key: ${{ env.GITHUB_APP_AGENT_HELPER_PRIVATE_KEY }}
-          owner: Stock-Trek
-          repositories: stock-trek-starter-rust
           # Scope the installation token to what this job actually does.
-          # permission-contents: read
-          # permission-issues: write
+          permission-contents: read
+          permission-issues: write
 
       - name: Remove GitHub App credentials from the environment
         run: |
@@ -317,11 +315,9 @@ jobs:
         with:
           client-id: ${{ env.GITHUB_APP_AGENT_HELPER_CLIENT_ID }}
           private-key: ${{ env.GITHUB_APP_AGENT_HELPER_PRIVATE_KEY }}
-          owner: Stock-Trek
-          repositories: stock-trek-starter-rust
           # Scope the installation token to what this job actually does.
-          # permission-contents: read
-          # permission-issues: write
+          permission-contents: read
+          permission-issues: write
 
       - name: Remove GitHub App credentials from the environment
         run: |
@@ -388,11 +384,9 @@ jobs:
         with:
           client-id: ${{ env.GITHUB_APP_AGENT_HELPER_CLIENT_ID }}
           private-key: ${{ env.GITHUB_APP_AGENT_HELPER_PRIVATE_KEY }}
-          owner: Stock-Trek
-          repositories: stock-trek-starter-rust
           # Scope the installation token to what this job actually does.
-          # permission-contents: read
-          # permission-issues: write
+          permission-contents: read
+          permission-issues: write
 
       - name: Remove GitHub App credentials from the environment
         run: |
@@ -472,13 +466,10 @@ jobs:
         with:
           client-id: ${{ env.GITHUB_APP_AGENT_HELPER_CLIENT_ID }}
           private-key: ${{ env.GITHUB_APP_AGENT_HELPER_PRIVATE_KEY }}
-          owner: Stock-Trek
-          repositories: stock-trek-starter-rust
           # Scope the installation token to what this job actually does.
-          # permission-contents: write
-          # permission-issues: write
-          # permission-pull-requests: write
-          # permission-workflows: write # TODO remove this permission when copying
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
 
       - name: Remove GitHub App credentials from the environment
         run: |
