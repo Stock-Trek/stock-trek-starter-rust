@@ -1,5 +1,15 @@
 use std::cmp::Ordering;
-use stock_trek::prelude::*;
+use stock_trek::{
+    Algorithm, Command, Preferences, RoundingStrategy, StrategyContext,
+    actions::{ActionErrorCause, ActionErrorResponse, RecoveryPolicy},
+    register_algorithm,
+    signals::{SignalContext, SignalKey, Signals},
+    traitreg,
+    types::{
+        AccountId, Activation, AssetId, CexId, CexPreferences, CexRoundingPreferences, Quantity,
+        Side, Tag, TimeInForce,
+    },
+};
 
 pub struct CostAveraging {
     key_cex: SignalKey<CexId>,
@@ -81,24 +91,27 @@ impl Algorithm for CostAveraging {
                     Ordering::Greater,
                     cheapest_price.clone(),
                 ),
-                c.commands.plan(vec![c.actions.send_order_request(
-                    cex.clone(),
-                    account.clone(),
-                    c.orders.limit(
-                        btc,
-                        usdt.clone(),
-                        Side::Buy,
-                        Activation::Immediate,
-                        cheapest_price,
-                        TimeInForce::ImmediateOrCancel,
-                        Quantity::OfBase(satoshi_quantity),
-                        tag,
-                    ),
-                    RecoveryPolicy::with_default_response(ActionErrorResponse::Stop).on_error(
-                        ActionErrorCause::TemporaryCexRejection,
-                        ActionErrorResponse::Retry { max_retries: 3 },
-                    ),
-                )]),
+                c.commands.plan(
+                    [c.actions.send_order_request(
+                        cex.clone(),
+                        account.clone(),
+                        c.orders.limit(
+                            btc,
+                            usdt.clone(),
+                            Side::Buy,
+                            Activation::Immediate,
+                            cheapest_price,
+                            TimeInForce::ImmediateOrCancel,
+                            Quantity::OfBase(satoshi_quantity),
+                            tag,
+                        ),
+                        RecoveryPolicy::with_default_response(ActionErrorResponse::Stop).on_error(
+                            ActionErrorCause::TemporaryCexRejection,
+                            ActionErrorResponse::Retry { max_retries: 3 },
+                        ),
+                    )]
+                    .to_vec(),
+                ),
                 c.commands.no_op(),
             ),
             c.commands.no_op(),

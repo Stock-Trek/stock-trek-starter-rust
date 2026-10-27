@@ -22,5 +22,5 @@ jobs:
 
       - name: Verify
         run: |
-          cargo install stock-trek-check@0.3.0
+          cargo install stock-trek-check
           stock-trek-check verify --file ./src/algorithms/algorithm.rs
