@@ -888,9 +888,9 @@ dependencies = [
 
 [[package]]
 name = "stock-trek-check"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc0a73a75a85548a0249c47c9fd96a8d7f9bdc845a4bbf45c31e721fb77cd6a5"
+checksum = "51c22d497fcfc0cac45ff7f2e31033320e28ae1e0342b3dbd69199aa1ed28e98"
 dependencies = [
  "hashbrown 0.17.1",
  "larpa",

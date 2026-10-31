@@ -1,5 +1,4 @@
 use std::{
-    ffi::OsStr,
     fs,
     path::{Path, PathBuf},
 };
@@ -19,9 +18,7 @@ fn algorithm_files(directory: &Path) -> Vec<PathBuf> {
             .path();
         if path.is_dir() {
             files.extend(algorithm_files(&path));
-        } else if path.extension() == Some(OsStr::new("rs"))
-            && path.file_name() != Some(OsStr::new("mod.rs"))
-        {
+        } else {
             files.push(path);
         }
     }
