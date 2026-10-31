@@ -39,7 +39,7 @@ fn algorithms_pass_stock_trek_check() {
     let failures = files
         .iter()
         .filter_map(|path| {
-            stock_trek_check::verify::verify(path.to_string_lossy().into_owned())
+            stock_trek_check::verify(path.to_string_lossy().into_owned())
                 .err()
                 .map(|error| format!("{}:\n{error}", path.display()))
         })

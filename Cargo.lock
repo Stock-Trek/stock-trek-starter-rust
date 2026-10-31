@@ -888,9 +888,9 @@ dependencies = [
 
 [[package]]
 name = "stock-trek-check"
-version = "0.3.2"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51c22d497fcfc0cac45ff7f2e31033320e28ae1e0342b3dbd69199aa1ed28e98"
+checksum = "e4c38faaed16a1a4a93b839465f824cbef8f5b1efb2541f01a32dbffb8d4a362"
 dependencies = [
  "hashbrown 0.17.1",
  "larpa",
@@ -902,7 +902,7 @@ dependencies = [
 
 [[package]]
 name = "stock-trek-starter-rust"
-version = "0.3.2"
+version = "0.3.3"
 dependencies = [
  "cargo-husky",
  "chrono",

@@ -1,6 +1,6 @@
 [package]
 name = "stock-trek-starter-rust"
-version = "0.3.2"
+version = "0.3.3"
 edition = "2024"
 
 [dependencies]
@@ -12,4 +12,4 @@ strum = "0.28"
 
 [dev-dependencies]
 cargo-husky = { version = "1", default-features = false, features = ["user-hooks"] }
-stock-trek-check = "0.3"
+stock-trek-check = "0.4"
