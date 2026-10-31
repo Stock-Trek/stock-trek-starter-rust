@@ -902,7 +902,7 @@ dependencies = [
 
 [[package]]
 name = "stock-trek-starter-rust"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "cargo-husky",
  "chrono",
